@@ -16,7 +16,7 @@ def main(*, package, dataname):
         https://vincentarelbundock.github.io/Rdatasets/datasets.html
     for a list of packages and datasets.
 
-    Usage examples:
+    Usage example:
     >>> data = main(package="AER", dataname="CollegeDistance")["data"]
     >>> len(data)
     4739
