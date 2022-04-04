@@ -150,24 +150,15 @@ def criterion_unset_or_matches_value(
     return bool(actual_value == criterion)
 
 
-def write_code_files(path: str) -> None:
-    for root, _, files in os.walk(path):
+def write_code_files(source_path: str, temp_dir: str) -> None:
+    for root, _, files in os.walk(source_path):
         for file in files:
-            path = os.path.join(root, file)
-            if path.endswith("json"):
-                with open(path, "r", encoding="utf-8") as f:
+            current_path = os.path.join(root, file)
+            if current_path.endswith("json"):
+                with open(current_path, "r", encoding="utf-8") as f:
                     transformation_revision = json.load(f)
                 if transformation_revision["type"] == Type.COMPONENT:
-                    code_file = ".".join(path.split(".")[:-1]) + ".py"
+                    code_file = os.path.join(temp_dir, file.split(".")[0] + ".py")
                     with open(code_file, "w", encoding="utf8") as f:
                         f.write(transformation_revision["content"])
 
-
-def remove_code_files(path: str) -> None:
-    for root, _, files in os.walk(path):
-        for file in files:
-            path = os.path.join(root, file)
-            if path.endswith("py"):
-                json_file = ".".join(path.split(".")[:-1]) + ".json"
-                if os.path.isfile(json_file):
-                    os.remove(path)

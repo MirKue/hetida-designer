@@ -9,7 +9,7 @@ usage() {
     echo "  - deps:lock       :    resolves and locks Python dependencies"
     echo "  - deps:sync       :    syncs currently activated virtual environment with locked Python dev dependencies."
     echo "  - test            :    run pytest on hetdesrun code"
-    # echo "  - test_components :    run pytest/doctest on components"
+    echo "  - test_components :    run pytest/doctest on components"
     echo "  - lint            :    call pylint"
     echo "  - typecheck       :    run mypy static type check"
 }
@@ -41,9 +41,10 @@ test() {
 }
 
 test_components() {
-    python -c "from hetdesrun.utils import write_code_files; write_code_files('./transformations/components/')"
+    mkdir ./transformations/code
+    python -c "from hetdesrun.utils import write_code_files; write_code_files('./transformations/components/', './transformations/code')"
     python -m pytest --doctest-modules ./transformations/components
-    python -c "from hetdesrun.utils import remove_code_files; remove_code_files('./transformations/components/')"
+    rm -r ./transformations/code
 }
 
 lint() {
