@@ -40,9 +40,11 @@ test() {
     python -m pytest --cov=hetdesrun --cov-report=term-missing tests "$@"
 }
 
-# test_components() {
-#     python -m pytest --doctest-modules components
-# }
+test_components() {
+    python -c "from hetdesrun.utils import write_code_files; write_code_files('./transformations/components/')"
+    python -m pytest --doctest-modules ./transformations/components
+    python -c "from hetdesrun.utils import remove_code_files; remove_code_files('./transformations/components/')"
+}
 
 lint() {
     pylint hetdesrun
