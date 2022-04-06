@@ -14,7 +14,7 @@ data_type_name: Dict[str, str] = {
 }
 
 documentation_template: str = """\
-# {name} ({category})
+#{category}: {name} ({version_tag})
 
 ## Description
 {description}
@@ -29,7 +29,7 @@ documentation_template: str = """\
 
 
 ## Examples
-{input_json}
+
 """
 
 
@@ -78,6 +78,7 @@ def generate_documentation(transformation_revision: TransformationRevision) -> s
         name=transformation_revision.name,
         category=transformation_revision.category,
         description=transformation_revision.description,
+        version_tag=transformation_revision.version_tag,
         inputs="\n".join(
             [
                 "* **" + io.name + "** (" + data_type_name[io.data_type] + "):"
@@ -96,17 +97,4 @@ def generate_documentation(transformation_revision: TransformationRevision) -> s
         )
         if len(transformation_revision.io_interface.outputs) > 0
         else "This component has no outputs.",
-        input_json="The json input of a typical call of this component is\n```\n{\n"
-        + ",\n".join(
-            [
-                '\t"'
-                + wiring_io.workflow_input_name
-                + '": '
-                + value_to_str(wiring_io.filters["value"])
-                for wiring_io in transformation_revision.test_wiring.input_wirings
-            ]
-        )
-        + "\n}\n```"
-        if len(transformation_revision.test_wiring.input_wirings) > 0
-        else "This component must be called with an empty input json {}.",
     )
