@@ -151,6 +151,7 @@ def criterion_unset_or_matches_value(
 
 
 def write_code_files(source_path: str, temp_dir: str) -> None:
+    os.makedirs(temp_dir, exist_ok=True)
     for root, _, files in os.walk(source_path):
         for file in files:
             current_path = os.path.join(root, file)

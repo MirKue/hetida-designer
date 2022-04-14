@@ -41,9 +41,8 @@ test() {
 }
 
 test_components() {
-    mkdir ./transformations/code
     python -c "from hetdesrun.utils import write_code_files; write_code_files('./transformations/components/', './transformations/code')"
-    python -m pytest --doctest-modules ./transformations/components
+    python -m pytest --doctest-modules ./transformations/code
     rm -r ./transformations/code
 }
 
