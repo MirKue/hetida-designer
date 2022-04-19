@@ -1,6 +1,5 @@
 """Utilities for scripting and in particular component/workflow deployment"""
 
-import os
 import json
 from typing import List, Optional, Tuple, Any, Dict
 from enum import Enum
@@ -148,18 +147,3 @@ def criterion_unset_or_matches_value(
     if criterion is None:
         return True
     return bool(actual_value == criterion)
-
-
-def write_code_files(source_path: str, temp_dir: str) -> None:
-    os.makedirs(temp_dir, exist_ok=True)
-    for root, _, files in os.walk(source_path):
-        for file in files:
-            current_path = os.path.join(root, file)
-            if current_path.endswith("json"):
-                with open(current_path, "r", encoding="utf-8") as f:
-                    transformation_revision = json.load(f)
-                if transformation_revision["type"] == Type.COMPONENT:
-                    code_file = os.path.join(temp_dir, file.split(".")[0] + ".py")
-                    with open(code_file, "w", encoding="utf8") as f:
-                        f.write(transformation_revision["content"])
-
