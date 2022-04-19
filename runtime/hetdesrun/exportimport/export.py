@@ -50,6 +50,17 @@ def slugify(value: str, allow_unicode: bool = False) -> str:
     return re.sub(r"[-\s]+", "-", value).strip("-_")
 
 
+def generate_file_name(tr_json: dict, ext: str) -> str:
+    # pylint: disable=redefined-builtin
+    id: str = tr_json["id"]
+    name: str = tr_json["name"]
+    version_tag: str = tr_json["version_tag"]
+
+    file_name = slugify(name) + "_" + slugify(version_tag) + "_" + id.lower() + ext
+
+    return file_name
+
+
 ##Base function to save transformation
 def save_transformation(tr_json: dict, download_path: str) -> None:
     # Create directory on local system
@@ -58,13 +69,10 @@ def save_transformation(tr_json: dict, download_path: str) -> None:
     # pylint: disable=redefined-builtin
     type = tr_json["type"]
     category = tr_json["category"]
-    tag = tr_json["version_tag"]
     cat_dir = os.path.join(download_path, slugify(category))
     Path(cat_dir).mkdir(parents=True, exist_ok=True)
-    path = os.path.join(
-        cat_dir,
-        slugify(name) + "_" + slugify(tag) + "_" + uuid.lower() + ".json",
-    )
+    file_name = generate_file_name(tr_json, ".json")
+    path = os.path.join(cat_dir, file_name)
 
     # Save the transformation revision
     with open(path, "w", encoding="utf8") as f:
