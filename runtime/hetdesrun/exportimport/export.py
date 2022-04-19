@@ -52,11 +52,11 @@ def slugify(value: str, allow_unicode: bool = False) -> str:
 
 def generate_file_name(tr_json: dict, ext: str) -> str:
     # pylint: disable=redefined-builtin
-    id: str = tr_json["id"]
+    id: UUID = tr_json["id"]
     name: str = tr_json["name"]
     version_tag: str = tr_json["version_tag"]
 
-    file_name = slugify(name) + "_" + slugify(version_tag) + "_" + id.lower() + ext
+    file_name = slugify(name) + "_" + slugify(version_tag) + "_" + str(id).lower() + ext
 
     return file_name
 

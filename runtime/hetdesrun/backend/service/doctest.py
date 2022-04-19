@@ -34,7 +34,7 @@ def write_code_to_file_in_temp_dir(
         )
     assert isinstance(transformation_revision.content, str)  # hint for mypy
 
-    code_file_path = os.path.join(temp_dir, file_name + ".py")
+    code_file_path = os.path.join(temp_dir, file_name)
     with open(code_file_path, "w", encoding="utf8") as f:
         f.write(transformation_revision.content)
 
@@ -50,6 +50,9 @@ def execute_doctest(
     with io.StringIO() as buffer, redirect_stdout(buffer):
         test_result = doctest.testfile(code_file_path, module_relative=False)
         output = buffer.getvalue()
+    os.remove(code_file_path)
+    if len(os.listdir(temp_dir)) == 0:
+        os.rmdir(temp_dir)
     return DoctestResponse(
         nof_failed=test_result.failed,
         nof_attempted=test_result.attempted,
