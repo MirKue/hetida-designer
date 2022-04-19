@@ -59,3 +59,9 @@ class ExecutionResponseFrontendDto(BaseModel):
     job_id: UUID
 
     Config = AdvancedTypesOutputSerializationConfig  # enable Serialization of some advanced types
+
+
+class DoctestResponse(BaseModel):
+    nof_failed: int
+    nof_attempted: int
+    output: str
