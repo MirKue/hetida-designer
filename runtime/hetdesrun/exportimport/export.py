@@ -156,6 +156,7 @@ def get_transformation_from_java_backend(id: UUID, type: Type) -> Any:
 
     # Generate transformation revision
     if type == Type.COMPONENT:
+        revision_json["type"] = Type.COMPONENT
         frontend_dto = ComponentRevisionFrontendDto(
             **revision_json,
         )
@@ -218,6 +219,13 @@ def export_transformations(
         )
 
     """
+    import hetdesrun.models.wiring  # pylint: disable=import-outside-toplevel
+
+    hetdesrun.models.wiring.EXPORT_MODE = True
+
+    import hetdesrun.backend.models.wiring  # pylint: disable=import-outside-toplevel
+
+    hetdesrun.backend.models.wiring.EXPORT_MODE = True
 
     headers = get_auth_headers()
 
@@ -234,7 +242,11 @@ def export_transformations(
     )
 
     if response.status_code != 200:
-        msg = f"No transformation revision found at url {url}."
+        msg = (
+            f"No transformation revision found at url {url}.\n"
+            f" Status code was {str(response.status_code)}.\n"
+            f" Response was: {str(response.text)}"
+        )
         raise Exception(msg)
 
     id_list = []
