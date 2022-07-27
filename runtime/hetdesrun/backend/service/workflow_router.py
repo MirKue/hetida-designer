@@ -73,7 +73,6 @@ async def create_workflow_revision(
     try:
         transformation_revision = workflow_dto.to_transformation_revision(
             documentation=(
-                "\n"
                 "# New Component/Workflow\n"
                 "## Description\n"
                 "## Inputs\n"
@@ -257,6 +256,9 @@ async def update_workflow_revision(
         updated_transformation_revision.test_wiring = (
             existing_transformation_revision.test_wiring
         )
+        updated_transformation_revision.released_timestamp = (
+            existing_transformation_revision.released_timestamp
+        )
 
     updated_transformation_revision = update_content(
         existing_transformation_revision, updated_transformation_revision
@@ -349,7 +351,7 @@ async def execute_workflow_revision(
     """Execute a transformation revision of type workflow.
 
     This endpoint is deprecated and will be removed soon,
-    use POST /api/transformations/{id}/execute instead.
+    use POST /api/transformations/execute instead which uses a new model for the payload.
     """
     if job_id is None:
         job_id = uuid4()

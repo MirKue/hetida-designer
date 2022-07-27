@@ -155,7 +155,6 @@ async def create_transformation_revision(
 
     transformation_revision = transformation_revision_dto.to_transformation_revision(
         documentation=(
-            "\n"
             "# New Component/Workflow\n"
             "## Description\n"
             "## Inputs\n"
@@ -261,6 +260,12 @@ async def update_transformation_revision(
         )
         updated_transformation_revision.test_wiring = (
             existing_transformation_revision.test_wiring
+        )
+        updated_transformation_revision.released_timestamp = (
+            existing_transformation_revision.released_timestamp
+        )
+        updated_transformation_revision.content = (
+            existing_transformation_revision.content
         )
 
     updated_transformation_revision = update_content(
